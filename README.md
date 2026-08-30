@@ -1,5 +1,7 @@
 <img src="assets/logo.png" alt="tui-tools" width="240">
 
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/tui-tools/tui-template/badge)](https://scorecard.dev/viewer/?uri=github.com/tui-tools/tui-template)
+
 # tui-template
 
 The starting point for a new [tui-tools](https://github.com/tui-tools) tool.

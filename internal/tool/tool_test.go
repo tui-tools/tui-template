@@ -147,7 +147,7 @@ func TestRealReadsADirectory(t *testing.T) {
 			t.Fatalf("write: %v", err)
 		}
 	}
-	if err := os.Mkdir(filepath.Join(dir, "sub"), 0o755); err != nil {
+	if err := os.Mkdir(filepath.Join(dir, "sub"), 0o750); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
 
