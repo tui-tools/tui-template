@@ -38,9 +38,7 @@ cd tui-template && make demo
 
 Or press "Use this template" on GitHub, which is the point of it.
 
-The distribution packages are not published yet. The commands below are here so
-you know what they will be; a package repository at `pkgs.tui.tools` is what
-turns them on.
+Not packaged for these yet; the static binary works everywhere in the meantime.
 
 ### Arch Linux — coming soon
 
@@ -145,7 +143,7 @@ first release lands in pkgs.tui.tools.
 ### Any distribution, static binary — coming soon
 
 ```sh
-curl -fsSL https://github.com/tui-tools/tui-template/releases/download/v{version}/tui-template_{version}_linux_amd64.tar.gz | tar -xz tui-template
+curl -fsSL https://github.com/tui-tools/tui-template/releases/download/v0.1.0/tui-template_0.1.0_linux_amd64.tar.gz | tar -xz tui-template
 sudo install -m0755 tui-template /usr/local/bin/tui-template
 ```
 
