@@ -79,6 +79,7 @@
     }
   ],
   "install": {
+    "repo_url": "https://pkgs.tui.tools",
     "source": {
       "available": true,
       "command": "git clone https://github.com/tui-tools/tui-template\ncd tui-template && make demo",
