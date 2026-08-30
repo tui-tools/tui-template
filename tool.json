@@ -93,7 +93,7 @@
       "requires_repo_setup": true,
       "command": "sudo pacman -S tui-template",
       "url": "https://pkgs.tui.tools/arch",
-      "note": "The template is never packaged. This entry shows your tool's shape."
+      "note": "The template is never packaged. Your tool's channel turns available once its first release lands in pkgs.tui.tools."
     },
     "apt": {
       "available": false,
@@ -102,7 +102,7 @@
       "requires_repo_setup": true,
       "command": "sudo apt install tui-template",
       "url": "https://pkgs.tui.tools/deb",
-      "note": "The template is never packaged. This entry shows your tool's shape."
+      "note": "The template is never packaged. Your tool's channel turns available once its first release lands in pkgs.tui.tools."
     },
     "dnf": {
       "available": false,
@@ -111,7 +111,7 @@
       "requires_repo_setup": true,
       "command": "sudo dnf install tui-template",
       "url": "https://pkgs.tui.tools/rpm",
-      "note": "The template is never packaged. This entry shows your tool's shape."
+      "note": "The template is never packaged. Your tool's channel turns available once its first release lands in pkgs.tui.tools."
     },
     "binary": {
       "available": false,

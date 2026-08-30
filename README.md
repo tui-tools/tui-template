@@ -74,7 +74,8 @@ Then, and for every other tool in the family:
 sudo pacman -S tui-template
 ```
 
-The template is never packaged. This entry shows your tool's shape.
+The template is never packaged. Your tool's channel turns available once its
+first release lands in pkgs.tui.tools.
 
 ### Debian and Ubuntu — coming soon
 
@@ -107,7 +108,8 @@ Then, and for every other tool in the family:
 sudo apt install tui-template
 ```
 
-The template is never packaged. This entry shows your tool's shape.
+The template is never packaged. Your tool's channel turns available once its
+first release lands in pkgs.tui.tools.
 
 ### Fedora and RHEL — coming soon
 
@@ -137,7 +139,8 @@ Then, and for every other tool in the family:
 sudo dnf install tui-template
 ```
 
-The template is never packaged. This entry shows your tool's shape.
+The template is never packaged. Your tool's channel turns available once its
+first release lands in pkgs.tui.tools.
 
 ### Any distribution, static binary — coming soon
 
@@ -225,6 +228,15 @@ keys worth advertising, the install commands and — most carefully — the
 [tui-kit/docs/tool-manifest.md](https://github.com/tui-tools/tui-kit/blob/main/docs/tool-manifest.md),
 and `make manifest` validates yours against the schema — CI runs the same check,
 so a manifest that drifts fails the build.
+
+The `install` channels stay `"available": false` in the template, and they
+should stay false in your tool until it has actually shipped. A channel is a
+promise: `available: true` renders the command as one a reader can run today,
+and the family website lists the tool as installable from that package manager.
+Tag `v0.1.0`, let the release build the `.deb`, the `.rpm` and the pacman
+package, and wait for the next `pkgs.tui.tools` publish to pick them up — then
+flip `pacman`, `apt` and `dnf` to `true` and run `make readme`. `zypper` and
+`aur` stay false across the family; nothing publishes to them yet.
 
 **6. Declare the backend you drive.** The `backends[]` block of `tool.json`
 names the binary, how to read its version, the oldest version you support, the
