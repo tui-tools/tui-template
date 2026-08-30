@@ -2,6 +2,8 @@
 
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/tui-tools/tui-template/badge)](https://scorecard.dev/viewer/?uri=github.com/tui-tools/tui-template)
 
+> **Beta.** Beta: the family is days old and still changing. Package names, flags and keys may move without notice until 1.0. Pin versions, and report what breaks.
+
 # tui-template
 
 The starting point for a new [tui-tools](https://github.com/tui-tools) tool.
@@ -145,7 +147,7 @@ first release lands in pkgs.tui.tools.
 ### Any distribution, static binary — coming soon
 
 ```sh
-curl -fsSL https://github.com/tui-tools/tui-template/releases/download/v0.1.0/tui-template_0.1.0_linux_amd64.tar.gz | tar -xz tui-template
+curl -fsSL https://github.com/tui-tools/tui-template/releases/download/v{version}/tui-template_{version}_linux_amd64.tar.gz | tar -xz tui-template
 sudo install -m0755 tui-template /usr/local/bin/tui-template
 ```
 
@@ -181,6 +183,8 @@ sha256sum -c checksums.txt --ignore-missing
 | `internal/tool/tool_test.go` | The two assertions that matter |
 | `tool.json` | The manifest the family website reads: tagline, category, keys, install, security |
 | `.github/workflows/ci.yml` | gofmt, vet, race tests, cross-build, tool.json validation, release on a tag |
+| `.github/workflows/codeql.yml` | The static analysis pass, on every push and weekly |
+| `internal/tool/fuzz_test.go` | The fuzz target every parser package carries |
 | `.goreleaser.yaml` | Static linux/amd64 and linux/arm64 archives |
 | `Makefile` | `check`, `build`, `demo`, `screenshots` |
 
@@ -268,8 +272,16 @@ Each `--screen` is `name=keys`; the keys are typed once the UI has drawn.
 projects off, delete-branch-on-merge on. Then add the tool to the family list in
 [tui-tools/.github](https://github.com/tui-tools/.github).
 
-**9. Release.** `git tag v0.1.0 && git push origin v0.1.0`, then `make readme`
-to put the new version in the download line. CI runs the checks
+**9. Release.** Tags are annotated, and the message is the release notes:
+GoReleaser renders it above the generated commit list, so the page opens with a
+sentence somebody wrote instead of a list of subjects.
+
+```sh
+git tag -a v0.1.0 -m "What changed for somebody running the tool."
+git push origin v0.1.0
+```
+
+Then `make readme`, to put the new version in the download line. CI runs the checks
 and GoReleaser attaches the static binaries. The tool then appears on
 [tui-tools.github.io](https://tui-tools.github.io) on its next build, which is
 hourly.
@@ -335,6 +347,23 @@ programs. Keep them, or the tool does not belong in it.
 Then table tests for every parser, against real command output pasted in
 verbatim. When a parser is wrong on someone's machine, their output becomes the
 next case.
+
+Then a fuzz target per parser, in the same package, seeded from the same
+`testdata` — `internal/tool/fuzz_test.go` is the template's example, over the
+one step every tool has: a name from outside becoming an argv. `make check`
+replays the seeds like any other test, and
+[tui-kit/templates/FUZZING.md](https://github.com/tui-tools/tui-kit/blob/main/templates/FUZZING.md)
+is the family rule, including why a crash's input gets committed.
+
+## Contributing
+
+Contributions to this template, and to any tool built from it, arrive as pull
+requests: [tui-kit's
+CONTRIBUTING.md](https://github.com/tui-tools/tui-kit/blob/main/CONTRIBUTING.md)
+is the family's process and the bar a change has to clear. A security problem
+is reported the way [tui-kit's
+SECURITY.md](https://github.com/tui-tools/tui-kit/blob/main/SECURITY.md)
+describes, privately, never in a public issue.
 
 ## License
 
