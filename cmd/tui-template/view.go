@@ -76,6 +76,11 @@ func (a *app) header() string {
 		{Label: "entries", Value: strconv.Itoa(len(a.items))},
 		{Label: "directories", Value: strconv.Itoa(dirs)},
 	}
+	// The backend version, when it was probed: quiet on a tested version,
+	// coloured on one nobody has run against. Keep this in your tool.
+	if a.backendCompat.Backend != "" {
+		facts = append(facts, ui.CompatFact(a.theme, a.backendCompat))
+	}
 	subtitle := a.backend.Describe()
 	if a.filter != "" {
 		subtitle += "  ·  filter: " + a.filter

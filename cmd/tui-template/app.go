@@ -7,6 +7,7 @@ import (
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/tui-tools/tui-kit/compat"
 	"github.com/tui-tools/tui-kit/runner"
 	"github.com/tui-tools/tui-kit/theme"
 	"github.com/tui-tools/tui-kit/ui"
@@ -28,6 +29,8 @@ const (
 type app struct {
 	backend tool.Backend
 	theme   theme.Theme
+	// backendCompat is what the version probe found, rendered in the header.
+	backendCompat compat.Result
 
 	items   []tool.Item
 	visible []tool.Item
@@ -65,8 +68,10 @@ type ranMsg struct {
 }
 
 // newApp builds the model around a backend.
-func newApp(backend tool.Backend, th theme.Theme) *app {
-	a := &app{backend: backend, theme: th, width: 80, height: 24, loading: true}
+func newApp(backend tool.Backend, th theme.Theme,
+	backendCompat compat.Result) *app {
+	a := &app{backend: backend, theme: th, backendCompat: backendCompat,
+		width: 80, height: 24, loading: true}
 	if th.Warning != "" {
 		a.setStatus(ui.StatusWarn, th.Warning)
 	}

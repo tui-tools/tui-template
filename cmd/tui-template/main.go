@@ -9,6 +9,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
@@ -127,7 +128,13 @@ func run(args []string) error {
 		}
 	}
 
-	program := tea.NewProgram(newApp(backend, theme.New()), tea.WithAltScreen())
+	// The backend's version is probed once, at startup, and shown in the
+	// header: a version nobody has tested says so there instead of surprising
+	// the user later.
+	backendCompat := probeCompat(context.Background(), opts.demo)
+
+	program := tea.NewProgram(newApp(backend, theme.New(), backendCompat),
+		tea.WithAltScreen())
 	_, err = program.Run()
 	return err
 }
