@@ -164,6 +164,63 @@ sha256sum -c checksums.txt --ignore-missing
 ```
 <!-- install:end -->
 
+## Usage
+
+```sh
+tui-template                       # list the working directory
+tui-template --demo                # sample data, nothing is touched
+tui-template --dir /var/log        # list somewhere else
+tui-template --report              # print what a bug report needs, exit
+tui-template --theme ~/mytheme/colors.toml
+tui-template --version
+```
+
+### `--report`, for bug reports
+
+`--report` prints, in one block, everything a maintainer has to ask for
+otherwise: the tool and kit versions, the backend and the version probed off
+it, the distribution, the kernel, the terminal, the theme, the escalation
+prefix, and whether the running binary came from a package. It needs no
+privileges and touches nothing, so it works on the machine where the bug is —
+including one where no backend can be built at all, which is itself a thing
+worth reporting.
+
+```console
+$ tui-template --report
+tui-template 0.1.0 (kit v0.2.9)
+backend: coreutils 9.6
+mode: live
+distro: fedora 42 (Fedora Linux 42 (Workstation Edition))
+kernel: 6.19.14-108.fc42.x86_64
+arch: x86_64
+locale: en_US.UTF-8
+term: xterm-256color
+theme: tokyo-night
+sudo: sudo -n
+root: no
+binary: /usr/bin/tui-template (packaged)
+```
+
+The block is written to be published as it is: it carries no hostname, user
+name, home path or address, and no environment variable beyond `LANG`,
+`LC_ALL`, `TERM` and `TERM_PROGRAM`. A binary living under your home directory
+is reported as being there without naming the path. `--report` works with
+`--demo` too, where it says so on the `mode` line and names the backend the
+fake imitates.
+
+Everything above the tool-specific lines comes from the kit, so the whole
+family answers `--report` in the same shape. In your tool, `report.go` is where
+you add what only it knows — the backend it selected, what it saw of the ones
+it did not — and where you make sure none of it names the user: the kit scrubs
+what it collected itself, and a value you pass through `report.Extra` is yours
+to scrub. `scrubHome` in that file is the template's example, over the one
+place a path can reach the block here.
+
+The bug form asks for this block first — see
+[`.github/ISSUE_TEMPLATE/bug_report.yml`](.github/ISSUE_TEMPLATE/bug_report.yml),
+which is rendered from the kit's template and needs no editing beyond the
+rename.
+
 ## What you get
 
 | From the kit | What it gives you |
@@ -172,12 +229,14 @@ sha256sum -c checksums.txt --ignore-missing
 | `ui` | Header, table, help bar, help screen, status line, dialogs |
 | `config` | `/etc/<tool>/…` + `~/.config/<tool>/…` + environment + flags |
 | `runner` | Preview → confirm → run, escalation, timeouts, and a fake |
+| `report` | The `--report` block a bug report pastes, in the family's shape |
 
 | In this repository | What it is |
 | --- | --- |
 | `cmd/tui-template/main.go` | Flags, configuration, backend selection, program start |
 | `cmd/tui-template/app.go` | The Bubble Tea model: one flat update loop |
 | `cmd/tui-template/view.go` | The four bands every screen draws |
+| `cmd/tui-template/report.go` | `--report`: the block a bug report pastes |
 | `internal/tool/tool.go` | Your model, your action table, your backend interface |
 | `internal/tool/real.go` | The backend that touches the machine |
 | `internal/tool/fake.go` | The in-memory backend behind `--demo` and the tests |
@@ -186,6 +245,7 @@ sha256sum -c checksums.txt --ignore-missing
 | `.github/workflows/ci.yml` | gofmt, vet, race tests, cross-build, tool.json validation, release on a tag |
 | `.github/workflows/codeql.yml` | The static analysis pass, on every push and weekly |
 | `internal/tool/fuzz_test.go` | The fuzz target every parser package carries |
+| `test/smoke.sh` | The assertions the lab runs against a real machine |
 | `.goreleaser.yaml` | Static linux/amd64 and linux/arm64 archives |
 | `Makefile` | `check`, `build`, `demo`, `screenshots` |
 
