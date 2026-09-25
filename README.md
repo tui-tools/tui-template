@@ -335,9 +335,23 @@ Each `--screen` is `name=keys`; the keys are typed once the UI has drawn.
 projects off, delete-branch-on-merge on. Then add the tool to the family list in
 [tui-tools/.github](https://github.com/tui-tools/.github).
 
-**9. Release.** Tags are annotated, and the message is the release notes:
-GoReleaser renders it above the generated commit list, so the page opens with a
-sentence somebody wrote instead of a list of subjects.
+**9. Release.** Make the repository public first, then push the tag. A new
+tool starts private and goes public together with its first release, but the
+release job cannot run in a private repository of the organization: build
+provenance (`actions/attest-build-provenance`) is not available to private
+repositories there, and `pkgs.tui.tools` refuses a release without it, because
+it verifies the provenance of every artifact before it signs and publishes. A
+tag pushed while the repository is private builds and uploads everything, fails
+at the attestation, and never reaches the package repository; the way out is to
+make the repository public and re-run the release workflow.
+
+```sh
+gh repo edit tui-tools/tui-yourtool --visibility public --accept-visibility-change-consequences
+```
+
+Tags are annotated, and the message is the release notes: GoReleaser renders it
+above the generated commit list, so the page opens with a sentence somebody
+wrote instead of a list of subjects.
 
 ```sh
 git tag -a v0.1.0 -m "What changed for somebody running the tool."
